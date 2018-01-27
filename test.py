@@ -5,13 +5,24 @@ from nltk import collocations
 
 
 measures = collocations.BigramAssocMeasures()
-doc = "이런 글을 쓴 이유는 쫄쫄 굶는 아일랜드 서민들을 위해서 아무것도 안 해주는 현실을 비꼬기 위해서다. 당연하지만 스위프트가 저걸 실제로 실행할 정도로 미친 인간은 절대 아니다. 무엇보다 스위프트는 아일랜드 출신이다!!!으로 자신의 소설 걸리버 여행기 라퓨타편에서 라퓨타에 항거해 독립을 쟁취하는 린달리노(Lindalino)라는 도시를 통해 아일랜드의 독립을 간접적으로 주장하다가 초판에서 편집당한 전적이 있었다. \r\n\r\n이런 점에서 다시 앞의 내용을 제대로 해석해보자면 \"아일랜드 사람들 다 죽게 생겼다. 이럴바엔 차라리 죽여라 영국놈들아.\"정도로 해석이 가능하며 위에서 언급한 걸리버 여행기와 더불어 블랙코미디의 원조같은 글이다. 어쨌건 파격적인 내용 덕분에 현대에도 많이 인용되는 수필이기도 하다. \r\n\r\n아일랜드 대기근 당시 상황을 풍자한 것으로 알려져 있기도 하나, 저작 연도를 보면 알 수 있듯이 100년 전에 나온 글이다. 다만 영국과 아일랜드 간의 나아질래야 나아질 수가 없는 관계를 설명하는데 좋은 글이긴 하다. 그리고 이 글이 쓰여진 뒤에도 아일랜드의 사정은 전혀 나아지지 않았다. 더 나빠지면 나빠졌지. 실제로 100년 뒤 대기근 때는 진짜로 사람을 수출(?)[1]하기 시작했다. 이것 때문에 아일랜드 인구는 기근전 900만명에서 절반넘게 이민가거나 아사해버려서 현재에도 아일랜드섬 전체의 인구는 600만명을 간신히 넘긴다. \"셋 중 하나는 죽고, 하나는 이민가고, 하나만 남았다\"고 보면 된다. \r\n\r\n여담이지만 잭 톰슨의 겸손한 게임 제안은 이 수필에서 이름을 딴 것이다. 물론 이름만 딴 거지 내용은 형편없다."
-tagged_words = Twitter().pos(doc)
+doc = "턴 에는 청소년 문제뿐만이 아닌 여러가지 복합적인 사회문제들이 간접적으로 제시되어있었다.  프로 작가들이 풀어내는 이야기들이라 첫 장을 펴면서 저도 모르게 이상한 나라의 앨리스처럼 끝장까지 스르륵 빠져든다는 게 이 책의 매력이다. 내가 가장 걱정하고 신경썼던 부분은 소율과 지아의 신경전, 그로인해 행해지는 사이버폭력이다. '혀 밑에 칼이 있다.' 라는 속담이있다. 하지만 이것도 옛 말이다. 클릭 한 번에 칼날이 비수로 꽂힌다 라는 말이 새로 생겨야한다. 누군가를 향한 정확하지 않은 사실에 대한 마구잡이 유포, 질투를 가장한 언어폭력은 현재 내가 이 글을 쓰고 있는 현실에서도 수없이 행해지는 사이버폭력들이다. 마음 연약한, 연한 녹색 새싹같은 아이들의 마음에 생채기를 내는 이런 사이버폭력들을 막으려면 어떻게 해야할까...? 다른 부분들도 의미깊고 재미있었지만 나는 이 부분이 가장 걱정되고, 개선하고 싶은 부분이라 생각한다. 강력한 인터넷 실명제를 도입하여 아예 사진까지도입하여 제 얼굴을 걸고 댓글을 쓰도록 만들어야하지 않을까 생각한다.생각없는 클릭질에 가슴에 피가 철철 흐르지 않도록 그렇게 되어야 한다....! 세용의 이야기도 의미깊고 기대가 되었다. 타인에 의해 이루어지는 변화는 어디까지일까. 한 사람으로 인해 변할 수 있는 세용의 넓이와 깊이가 궁금하다. 청소년연작소설 [뜨인돌] 턴 정말 매력있고 생각할 거리를 주는 좋은 청소년 소설이었다. 내가 한 행동은 미래에 누군가가 나에게 할 수 있는 행동이다. 모든 것은 연결되어있다. 좋은 것은 좋은 것과, 혹은 나쁜 것과..그렇지만 나쁜것과 연결된 것은 전에 내가 했던 좋았던 행동으로 상쇄시킬 수 있다. 뫼비우스의 띠처럼 우리는 같은, 이어진 고리를 끊임없이 순환하는 것은 아닐까. 간만에 독서 열심히 한 것 같다. 지루하지 않게, 생감있게, 현실을 바로 볼 수 있을 수 있었던 좋은 책이었다."
 
+print('\nCollocations among tagged words:')
+tagged_words = Twitter().pos(doc)
+finder = collocations.BigramCollocationFinder.from_words(tagged_words)
+print(finder.nbest(measures.pmi, 10)) # top 5 n-grams with highest PMI
+
+
+
+print('\nCollocations among words:')
 words = [w for w, t in tagged_words]
 ignored_words = [u'안녕']
 finder = collocations.BigramCollocationFinder.from_words(words)
 finder.apply_word_filter(lambda w: len(w) < 2 or w in ignored_words)
 finder.apply_freq_filter(3) # only bigrams that appear 3+ times
-result = finder.nbest(measures.pmi, 10)
-print(result)
+pprint(finder.nbest(measures.pmi, 10))
+
+print('\nCollocations among tags:')
+tags = [t for w, t in tagged_words]
+finder = collocations.BigramCollocationFinder.from_words(tags)
+pprint(finder.nbest(measures.pmi, 5))

@@ -44,6 +44,24 @@ class BoardAnalizeByBoardId(generics.RetrieveAPIView):
 
         return Response(serializer.data)
 
+class BoardAnalizeByBoardIdPretty(generics.RetrieveAPIView):
+
+    serializer_class = BoardAnalyzeSerializer
+    name = 'board-cotent-analyze-pretty'
+
+    def retrieve(self, request, *args, **kwargs):
+
+        jpype.attachThreadToJVM()
+        board = Board.objects.get(pk=kwargs['pk'])
+        analyzed_data = twitter.pos(board.content, norm=True, stem=True)
+        analyzed_data = [item[0] for item in analyzed_data]
+        response = BoardAnalyze.objects.create(
+            board_id = board,
+            result = ",".join(analyzed_data)
+        )
+        serializer = self.get_serializer(response)
+
+        return Response(serializer.data)
 
 class BoardCollocationsByBoardId(generics.RetrieveAPIView):
 
@@ -70,7 +88,35 @@ class BoardCollocationsByBoardId(generics.RetrieveAPIView):
         )
         serializer = self.get_serializer(response)
         return Response(serializer.data)
-        
+
+class BoardCollocationsByBoardIdPretty(generics.RetrieveAPIView):
+
+    serializer_class = BoardAnalyzeSerializer
+    name = 'board-cotent-collocations'
+
+    def retrieve(self, request, *args, **kwargs):
+
+        jpype.attachThreadToJVM()
+        board = Board.objects.get(pk=kwargs['pk'])
+        measures = collocations.BigramAssocMeasures()
+        tagged_words = Twitter().pos(board.content)
+        finder = collocations.BigramCollocationFinder.from_words(tagged_words)
+        result = finder.nbest(measures.pmi, 10) # top 5 n-grams with highest PMI
+        text_result = ""
+        for tuples in result:
+            text_result += tuples[0][0]
+            text_result += ","
+            text_result += tuples[1][0]
+
+        response = BoardAnalyze.objects.create(
+            board_id = board,
+            result = text_result
+        )
+        serializer = self.get_serializer(response)
+        return Response(serializer.data)
+
+
+
 class BoardCollocationsExtractByBoardId(generics.RetrieveAPIView):
 
     serializer_class = BoardAnalyzeSerializer
