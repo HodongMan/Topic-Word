@@ -25,6 +25,15 @@ class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
     name = 'board-detail'
 
+class BoardListByUser(generics.ListAPIView):
+
+    serializer_class = BoardSerializer
+    name = 'board-user-list'
+    
+    def get_queryset(self):
+
+        return Board.objects.filter(user=self.kwargs['user'])
+
 class BoardAnalizeByBoardId(generics.RetrieveAPIView):
 
     serializer_class = BoardAnalyzeSerializer
