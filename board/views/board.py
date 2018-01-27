@@ -107,6 +107,7 @@ class BoardCollocationsByBoardIdPretty(generics.RetrieveAPIView):
             text_result += tuples[0][0]
             text_result += ","
             text_result += tuples[1][0]
+            text_result += ","
 
         response = BoardAnalyze.objects.create(
             board_id = board,
