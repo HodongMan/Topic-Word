@@ -1,1 +1,1 @@
-from .board import BoardList, BoardDetail
+from .board import BoardList, BoardDetail, BoardAnalizeByBoardId

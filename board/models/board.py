@@ -13,3 +13,16 @@ class Board(models.Model):
 
     class Meta:
         ordering = ('-created',)
+
+class BoardAnalyze(models.Model):
+
+    board_id = models.ForeignKey(
+        Board,
+        related_name='board',
+        on_delete=models.CASCADE
+    )
+    result = models.TextField()
+    created = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('-board_id', )

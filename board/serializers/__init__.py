@@ -1,1 +1,1 @@
-from .board import BoardSerializer
+from .board import BoardSerializer, BoardAnalyzeSerializer
