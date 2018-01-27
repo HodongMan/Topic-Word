@@ -1,1 +1,0 @@
-from .crime import CrimeList, CrimeDetail
