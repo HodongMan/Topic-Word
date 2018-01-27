@@ -54,7 +54,7 @@ class BoardAnalizeByBoardIdPretty(generics.RetrieveAPIView):
         jpype.attachThreadToJVM()
         board = Board.objects.get(pk=kwargs['pk'])
         analyzed_data = twitter.pos(board.content, norm=True, stem=True)
-        analyzed_data = [item[0] for item in analyzed_data]
+        analyzed_data = [item[0] for item in analyzed_data if item[1] == "Noun"]
         response = BoardAnalyze.objects.create(
             board_id = board,
             result = ",".join(analyzed_data)
