@@ -29,7 +29,7 @@ class BoardListByUser(generics.ListAPIView):
 
     serializer_class = BoardSerializer
     name = 'board-user-list'
-    
+
     def get_queryset(self):
 
         return Board.objects.filter(user=self.kwargs['user'])
@@ -113,10 +113,13 @@ class BoardCollocationsByBoardIdPretty(generics.RetrieveAPIView):
         result = finder.nbest(measures.pmi, 10) # top 5 n-grams with highest PMI
         text_result = ""
         for tuples in result:
-            text_result += tuples[0][0]
-            text_result += ","
-            text_result += tuples[1][0]
-            text_result += ","
+
+            if tuples[0][1] == "Noun":
+                text_result += tuples[0][0]
+                text_result += ","
+            if tuples[1][1] == "Noun":
+                text_result += tuples[1][0]
+                text_result += ","
 
         response = BoardAnalyze.objects.create(
             board_id = board,
@@ -155,4 +158,3 @@ class BoardCollocationsExtractByBoardId(generics.RetrieveAPIView):
         )
         serializer = self.get_serializer(response)
         return Response(serializer.data)
-
